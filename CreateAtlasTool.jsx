@@ -1,5 +1,12 @@
+// --- Atlas Creation Tool ---
+
+
 #target photoshop
 
+
+/**
+ * Initializes the UI and callbacks
+ */
 function InitUI()
 {
 	var window = new Window("dialog", "Create Animation Atlas Tool");
@@ -51,6 +58,12 @@ function InitUI()
 	window.show();
 }
 
+/**
+ * Finds all image files in the given path and returns the file list
+ * @param  {String} 	path 				Path to get all the image files from
+ * @param  {Boolean} 	subfolders 	Whether to include subfolders or not
+ * @return {Array}      					Image file list
+ */
 function FindFilesInPath(path, subfolders)
 {
 	var folder = new Folder(path);
@@ -82,6 +95,9 @@ function FindFilesInPath(path, subfolders)
 	return fileList;
 }
 
+/**
+ * Selects all non transparent pixels of the currently opened image
+ */
 function SelectNonTransparentPixels()
 {
 	var desc = new ActionDescriptor();
@@ -94,6 +110,13 @@ function SelectNonTransparentPixels()
 	executeAction( charIDToTypeID( "setd" ), desc, DialogModes.NO );
 }
 
+/**
+ * Opens and processeses the given image. Then pastes it on the atlas document
+ * @param  {String} image 	Source image path
+ * @param  {Array} 	size 		Target size in X and Y
+ * @param  {Array} 	pos 		Target position in X and Y on the atlas document
+ * @param  {Number} num 		ID of the image
+ */
 function ProcessImage(image, size, pos, num)
 {
 	var atlasDoc = app.activeDocument;
@@ -174,12 +197,20 @@ function ProcessImage(image, size, pos, num)
 	currentImage.close(SaveOptions.DONOTSAVECHANGES);
 }
 
+/**
+ * Opens a directory prompt dialog and returns the selected path
+ * @return {String}		Selected folder
+ */
 function DirPrompt()
 {
 	var folder = Folder.selectDialog("Select the directory that contains the frames");
 	return folder;
 }
 
+/**
+ * Sets the TGA save options
+ * @return {Object}		Targa save options object
+ */
 function TGAOptions()
 {
 	var tgaSave = new TargaSaveOptions();
@@ -188,6 +219,11 @@ function TGAOptions()
 	return tgaSave;
 }
 
+/**
+ * Runs the main functionality of the tool and shows a save dialog when finished
+ * @param  {String} 	path 	Path where the image files are found
+ * @param  {Number} 	size 	Size of the atlas (both X and Y)
+ */
 function RunTool(path, size)
 {
 	var rulers = app.preferences.rulerUnits;
@@ -284,4 +320,5 @@ function RunTool(path, size)
 	app.preferences.rulerUnits = rulers;
 }
 
+// --- MAIN ---
 InitUI();
